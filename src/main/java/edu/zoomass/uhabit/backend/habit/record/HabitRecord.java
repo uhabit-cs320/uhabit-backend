@@ -16,6 +16,13 @@ public class HabitRecord {
     @Id
     private long id;
 
+    private long habidId;
+    private long userId;
+
+    private boolean privateHabit;
+
     @ElementCollection
     private List<Date> completedDates;
+
+
 }

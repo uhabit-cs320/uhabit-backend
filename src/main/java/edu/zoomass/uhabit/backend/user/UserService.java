@@ -19,6 +19,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public User findById(long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public List<User> getAllByHabit(long habitId) {
         return userRepository.findAllByHabits(habitId);
     }

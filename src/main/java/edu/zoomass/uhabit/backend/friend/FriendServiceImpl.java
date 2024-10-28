@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class FriendServiceImpl implements FriendService{
@@ -16,19 +17,15 @@ public class FriendServiceImpl implements FriendService{
     private FriendRepository friendRepository;
 
     @Override
-    public Set<User> getFriends(final User user) {
-        if (user == null) {
-            throw new InvalidUserException("User is null");
-        }
-
-        return friendRepository.getFriends(user);
+    public Set<Friend> getFriends(final long userId) {
+        return friendRepository.getFriendsByUserId(userId);
     }
 
     @Override
-    public void addFriend(User user, User friend) {
+    public void addFriend(long userId, long friendId) {
         final Friend friendEntity = Friend.builder()
-                .userId(user.getId())
-                .friendId(friend.getId())
+                .userId(userId)
+                .friendId(friendId)
                 .status(FriendStatus.FRIEND)
                 .createdDate(new Date())
                 .updatedDate(new Date())
@@ -37,8 +34,8 @@ public class FriendServiceImpl implements FriendService{
         friendRepository.save(friendEntity);
 
         final Friend otherFriendEntity = Friend.builder()
-                .userId(friend.getId())
-                .friendId(user.getId())
+                .userId(friendId)
+                .friendId(userId)
                 .status(FriendStatus.FRIEND)
                 .createdDate(new Date())
                 .updatedDate(new Date())
@@ -48,12 +45,37 @@ public class FriendServiceImpl implements FriendService{
     }
 
     @Override
-    public void removeFriend(User user, User friend) {
-        final Friend friendEntity = friendRepository.findByUserIdAndFriendId(user.getId(), friend.getId());
-        final Friend otherFriendEntity = friendRepository.findByUserIdAndFriendId(friend.getId(), user.getId());
+    public void removeFriend(long userId, long friendId) {
+        final Friend friendEntity = friendRepository.findByUserIdAndFriendId(userId, friendId);
+        final Friend otherFriendEntity = friendRepository.findByUserIdAndFriendId(friendId, userId);
 
         _unfriend(friendEntity);
         _unfriend(otherFriendEntity);
+    }
+
+    @Override
+    public boolean isFriend(long userId, long friendId) {
+        final Friend friendEntity = friendRepository.findByUserIdAndFriendId(userId, friendId);
+        return friendEntity != null && friendEntity.getStatus() == FriendStatus.FRIEND;
+    }
+
+    @Override
+    public Set<Long> getSuggestedFriends(long userId) {
+        final Set<Friend> friends = friendRepository.getFriendsByUserId(userId);
+
+        if (friends.isEmpty()) {
+            return Set.of();
+        }
+
+        final Set<Friend> friendsOfFriends = friends.stream()
+                .map(friend -> friendRepository.getFriendsByUserId(friend.getFriendId()))
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+
+        return friendsOfFriends.stream()
+                .filter(friend -> !friends.contains(friend))
+                .map(Friend::getFriendId)
+                .collect(Collectors.toSet());
     }
 
     private void _unfriend(Friend friend) {
@@ -61,4 +83,6 @@ public class FriendServiceImpl implements FriendService{
         friend.setUpdatedDate(new Date());
         friendRepository.save(friend);
     }
+
+
 }

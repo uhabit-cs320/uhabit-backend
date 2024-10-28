@@ -18,4 +18,8 @@ public class Habit {
     @NotNull
     @NotBlank
     private String name;
+
+    private long ownerId;
+
+    private HabitVisibility visibility;
 }
