@@ -1,13 +1,13 @@
 package edu.zoomass.uhabit.backend.habit.visibility;
 
 import edu.zoomass.uhabit.backend.habit.Habit;
-import edu.zoomass.uhabit.backend.user.User;
+import edu.zoomass.uhabit.backend.user.UserProfile;
 import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AbstractHabitVisibilityEvaluator implements HabitVisibilityEvaluator {
     
-    protected boolean isOwner(Habit habit, User viewer) {
+    protected boolean isOwner(Habit habit, UserProfile viewer) {
         return habit.getOwnerId() == viewer.getId();
     }
     

@@ -1,11 +1,11 @@
 package edu.zoomass.uhabit.backend.friendrequest;
 
-import edu.zoomass.uhabit.backend.user.User;
+import edu.zoomass.uhabit.backend.user.UserProfile;
 
 import java.util.List;
 
 public interface FriendRequestService {
-    void sendFriendRequest(final User self, final User target);
+    void sendFriendRequest(final UserProfile self, final UserProfile target);
 
-    List<User> getAllIncomingFriendRequests(final User user);
+    List<UserProfile> getAllIncomingFriendRequests(final UserProfile user);
 }

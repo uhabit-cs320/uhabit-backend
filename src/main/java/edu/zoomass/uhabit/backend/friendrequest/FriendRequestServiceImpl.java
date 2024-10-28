@@ -1,6 +1,6 @@
 package edu.zoomass.uhabit.backend.friendrequest;
 
-import edu.zoomass.uhabit.backend.user.User;
+import edu.zoomass.uhabit.backend.user.UserProfile;
 import edu.zoomass.uhabit.backend.user.exception.InvalidUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     private FriendRequestRepository friendRequestRepository;
 
     @Override
-    public void sendFriendRequest(final User self, final User target) {
+    public void sendFriendRequest(final UserProfile self, final UserProfile target) {
         final FriendRequest friendRequest = FriendRequest.builder()
                 .receiverId(target.getId())
                 .senderId(self.getId())
@@ -27,7 +27,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public List<User> getAllIncomingFriendRequests(final User user) {
+    public List<UserProfile> getAllIncomingFriendRequests(final UserProfile user) {
         if (user == null) {
             throw new InvalidUserException("User is null");
         }

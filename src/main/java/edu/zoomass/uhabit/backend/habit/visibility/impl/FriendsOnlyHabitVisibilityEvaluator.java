@@ -4,7 +4,7 @@ import edu.zoomass.uhabit.backend.friend.FriendService;
 import edu.zoomass.uhabit.backend.habit.Habit;
 import edu.zoomass.uhabit.backend.habit.HabitVisibility;
 import edu.zoomass.uhabit.backend.habit.visibility.AbstractHabitVisibilityEvaluator;
-import edu.zoomass.uhabit.backend.user.User;
+import edu.zoomass.uhabit.backend.user.UserProfile;
 import edu.zoomass.uhabit.backend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -21,7 +21,7 @@ public class FriendsOnlyHabitVisibilityEvaluator extends AbstractHabitVisibility
     
 
     @Override
-    public boolean hasVisibility(Habit habit, User viewer) {
+    public boolean hasVisibility(Habit habit, UserProfile viewer) {
         if (habit.getVisibility() != HabitVisibility.FRIENDS_ONLY) {
             return false;
         }
@@ -30,7 +30,7 @@ public class FriendsOnlyHabitVisibilityEvaluator extends AbstractHabitVisibility
             return true;
         }
         
-        User owner = userService.findById(habit.getOwnerId());
+        UserProfile owner = userService.findById(habit.getOwnerId());
         return friendService.getActiveFriendsIds(owner.getId()).contains(viewer.getId());
     }
 }

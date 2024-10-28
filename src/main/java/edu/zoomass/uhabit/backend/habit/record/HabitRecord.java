@@ -1,28 +1,35 @@
 package edu.zoomass.uhabit.backend.habit.record;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class HabitRecord {
     @Id
+    @GeneratedValue
     private long id;
 
-    private long habidId;
+    private long habitId;
+
     private long userId;
+
+    private HabitRecordStatus status;
 
     private boolean privateHabit;
 
     @ElementCollection
-    private List<Date> completedDates;
+    private Set<LocalDate> completedDates;
 
 
 }

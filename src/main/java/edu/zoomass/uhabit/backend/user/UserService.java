@@ -11,19 +11,19 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User saveUser(User user) {
+    public UserProfile saveUser(UserProfile user) {
         return userRepository.save(user);
     }
 
-    public User getUserByEmail(String email) {
+    public UserProfile getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public User findById(long id) {
+    public UserProfile findById(long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public List<User> getAllByHabit(long habitId) {
-        return userRepository.findAllByHabits(habitId);
+    public List<UserProfile> getAllByHabit(long habitId) {
+        return List.of();
     }
 }

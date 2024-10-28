@@ -1,7 +1,7 @@
 package edu.zoomass.uhabit.backend.habit.visibility;
 
 import edu.zoomass.uhabit.backend.habit.Habit;
-import edu.zoomass.uhabit.backend.user.User;
+import edu.zoomass.uhabit.backend.user.UserProfile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class HabitVisibilityService {
         this.evaluators = evaluators;
     }
     
-    public boolean hasVisibility(Habit habit, User viewer) {
+    public boolean hasVisibility(Habit habit, UserProfile viewer) {
         return evaluators.stream()
                 .anyMatch(evaluator -> evaluator.hasVisibility(habit, viewer));
     }

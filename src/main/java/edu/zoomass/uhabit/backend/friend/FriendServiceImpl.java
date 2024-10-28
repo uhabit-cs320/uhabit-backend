@@ -1,12 +1,9 @@
 package edu.zoomass.uhabit.backend.friend;
 
-import edu.zoomass.uhabit.backend.user.User;
-import edu.zoomass.uhabit.backend.user.exception.InvalidUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
