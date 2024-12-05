@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,8 +29,8 @@ public class HabitRecord {
 
     private boolean privateHabit;
 
-    @ElementCollection
-    private Set<LocalDate> completedDates;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<LocalDate> completedDates = new HashSet<>();
 
 
 }

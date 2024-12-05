@@ -1,9 +1,11 @@
 package edu.zoomass.uhabit.backend.friend;
 
+import edu.zoomass.uhabit.backend.user.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,7 +63,7 @@ public class FriendServiceImpl implements FriendService{
         final Set<Friend> friends = friendRepository.getFriendsByUserId(userId);
 
         if (friends.isEmpty()) {
-            return Set.of();
+            return friendRepository.findRandomFriends();
         }
 
         final Set<Friend> friendsOfFriends = friends.stream()
@@ -69,10 +71,16 @@ public class FriendServiceImpl implements FriendService{
                 .flatMap(Set::stream)
                 .collect(Collectors.toSet());
 
-        return friendsOfFriends.stream()
+        final Set<Long> friendSet = friendsOfFriends.stream()
                 .filter(friend -> !friends.contains(friend))
                 .map(Friend::getFriendId)
                 .collect(Collectors.toSet());
+
+        if (friendSet.size() < 6) {
+            friendSet.addAll(friendRepository.findRandomFriends(6 - friendSet.size()));
+        }
+
+        return friendSet;
     }
 
     private void _unfriend(Friend friend) {

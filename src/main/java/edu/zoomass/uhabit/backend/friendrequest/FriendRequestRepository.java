@@ -6,19 +6,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
 
     @Query("SELECT f FROM FriendRequest f WHERE f.senderId = :senderId")
-    FriendRequest findAllBySenderId(long senderId);
+    Set<FriendRequest> findAllBySenderId(long senderId);
 
     @Query("SELECT f FROM FriendRequest f WHERE f.receiverId = :receiverId")
-    FriendRequest findAllByReceiverId(long receiverId);
+    Set<FriendRequest> findAllByReceiverId(long receiverId);
 
-    @Query("SELECT u FROM UserProfile u JOIN FriendRequest f ON u.id = f.senderId WHERE f.receiverId = :userId")
-    List<UserProfile> getAllIncomingFriendRequests(long userId);
+    @Query("SELECT f FROM FriendRequest f WHERE f.senderId = :senderId AND f.receiverId = :receiverId ORDER BY f.id LIMIT 1")
+    FriendRequest findBySenderIdAndReceiverId(long senderId, long receiverId);
 
-    @Query("SELECT u FROM UserProfile u JOIN FriendRequest f ON u.id = f.receiverId WHERE f.senderId = :userId")
-    List<UserProfile> getAllOutgoingFriendRequests(long userId);
+    @Query("SELECT f FROM FriendRequest f WHERE f.receiverId = :userId")
+    List<FriendRequest> getAllIncomingFriendRequests(long userId);
+
+    @Query("SELECT f FROM FriendRequest f WHERE f.senderId = :userId")
+    List<FriendRequest> getAllOutgoingFriendRequests(long userId);
 }

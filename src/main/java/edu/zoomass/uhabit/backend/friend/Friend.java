@@ -1,6 +1,7 @@
 package edu.zoomass.uhabit.backend.friend;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Builder
 public class Friend {
     @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
     private long id;
 
     private long userId;

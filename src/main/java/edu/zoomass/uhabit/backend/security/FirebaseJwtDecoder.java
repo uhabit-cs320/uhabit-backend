@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -49,6 +50,14 @@ public class FirebaseJwtDecoder {
             user = new UserProfile();
             user.setEmail(payload.getEmail());
             user.setId(generateUserId(payload.getUserId()));
+            user.setName(payload.getName());
+            user.setPicture(payload.getPicture());
+            user = userService.saveUser(user);
+        }
+
+        if (!payload.getName().equals(user.getName()) || !payload.getPicture().equals(user.getPicture())) {
+            user.setName(payload.getName());
+            user.setPicture(payload.getPicture());
             user = userService.saveUser(user);
         }
 

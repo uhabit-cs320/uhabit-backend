@@ -29,10 +29,12 @@ public class HabitRecordServiceImpl implements HabitRecordService {
                             .privateHabit(false)
 
                             // Initialize with today's date to have it removed after
-                            .completedDates(Set.of(LocalDate.now()))
+                            .completedDates(new HashSet<>(Set.of(LocalDate.now())))
                             .build();
                     return repository.save(newRecord);
                 });
+
+        System.out.println("record.getCompletedDates() = " + record.getCompletedDates());
 
         // Remove on second click
         if (record.getCompletedDates().contains(LocalDate.now())) {
