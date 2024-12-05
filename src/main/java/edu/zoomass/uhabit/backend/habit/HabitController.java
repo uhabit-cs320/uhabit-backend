@@ -45,4 +45,18 @@ public class HabitController {
 
         return ResponseEntity.ok(habitValue);
     }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Habit>> getHabitsByUser(@AuthenticationPrincipal final UserProfile profile, @PathVariable long userId) {
+        if (profile == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (profile.getId() != userId) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(habitService.getUserHabits(userId));
+    }
 }

@@ -1,5 +1,7 @@
 package edu.zoomass.uhabit.backend.habit.record;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import edu.zoomass.uhabit.backend.Views;
 import edu.zoomass.uhabit.backend.habit.DefaultHabits;
 import edu.zoomass.uhabit.backend.user.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,33 @@ public class HabitRecordController {
                 return ResponseEntity.noContent().build();
             }
         }
+
+        return ResponseEntity.ok(
+                habitRecords
+        );
+    }
+
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<HabitRecord>> getHabits(@PathVariable long userId) {
+        List<HabitRecord> habitRecords = habitRecordService.getUserActiveHabitRecords(userId);
+
+        if (habitRecords == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (habitRecords.isEmpty()) {
+            // add default habits
+            subscribeToDefaultHabits(userId);
+
+            // Fetch the newly created records
+            habitRecords = habitRecordService.getUserActiveHabitRecords(userId);
+            if (habitRecords.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+        }
+
+        habitRecords = habitRecords.stream().filter(habitRecord -> !habitRecord.isPrivateHabit()).toList();
 
         return ResponseEntity.ok(
                 habitRecords
