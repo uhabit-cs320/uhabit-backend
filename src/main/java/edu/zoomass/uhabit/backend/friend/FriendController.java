@@ -58,4 +58,13 @@ public class FriendController {
                 .collect(Collectors.toSet());
         return ResponseEntity.ok(profiles);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Set<UserProfile>> searchUsers(@AuthenticationPrincipal UserProfile profile, @RequestParam String query) {
+        if (profile == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Set<UserProfile> profiles = userService.searchUsers(query);
+        return ResponseEntity.ok(profiles);
+    }
 }

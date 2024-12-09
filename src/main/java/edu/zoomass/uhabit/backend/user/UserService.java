@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -29,5 +30,9 @@ public class UserService {
 
     public List<UserProfile> getAllByHabit(long habitId) {
         return List.of();
+    }
+
+    public Set<UserProfile> searchUsers(String query) {
+        return userRepository.searchUsers(query);
     }
 }
